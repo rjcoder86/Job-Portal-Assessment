@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views import View
-import xml.etree.ElementTree as ET
 import pandas as pd
+from logging import getLogger
 
 # local imports
 from common_utils.enums import UserTypes
 from user.models import JobSeeker, Recruiter
 from .forms import JobPostForm, ApplicationForm
 from .models import Job
+
+logger = getLogger(__name__)
 
 class RecruiterDashboardView(View):
     """
@@ -80,21 +82,24 @@ class BulkPostJobView(View):
     def post(self, request):
         """ Process the uploaded Excel file and create jobs in the database. """
         excel_file = request.FILES['excel_file']
+        try:
+            df = pd.read_excelS(excel_file)
 
-        df = pd.read_excel(excel_file)
+            job_openings = []
+            for index, row in df.iterrows():
+                job_openings.append(Job(
+                    job_title=row['job_title'],
+                    description=row['description'], 
+                    experience=row['experience'],
+                    skills=row['skills'], 
+                    recruiter = request.user
+                    ))
+            Job.objects.bulk_create(job_openings)
 
-        job_openings = []
-        for index, row in df.iterrows():
-            job_openings.append(Job(
-                job_title=row['job_title'],
-                description=row['description'], 
-                experience=row['experience'],
-                skills=row['skills'], 
-                recruiter = request.user
-                ))
-        Job.objects.bulk_create(job_openings)
-
-        return redirect('recruiter_dashboard')
+            return redirect('recruiter_dashboard')
+        except Exception as e:
+            logger.error(str(e))
+            return redirect('recruiter_dashboard')
 
 class ApplyJobView(View):
     """

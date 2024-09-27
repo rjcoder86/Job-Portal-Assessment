@@ -264,7 +264,6 @@ class PasswordResetView(View):
             if form.is_valid():
                 email = form.cleaned_data['email']
                 try:
-                    breakpoint()
                     user = User.objects.get(email=email)
                     send_reset_password_email(user, request)
                     messages.success(request, "Password reset link has been sent to your email.")
