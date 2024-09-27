@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recruiter Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h2>Welcome, {{ user.username }} (Recruiter)</h2>
+    <div class="profile-actions">
+        <a href="{% url 'edit_recruiter_profile' %}" class="btn btn-primary">Edit Profile</a>
+        <a href="{% url 'logout' %}" class="btn btn-primary logout-btn">Logout</a>
+    </div>
+    <a href="{% url 'post_job' %}" class="button">Post a New Job</a>
+    <br>
+    <a href="{% url 'post_job_bulk' %}" class="button">Bulk Create Jobs</a>
+    <p>Jobs Created:{% if jobs %} {{jobs.count}} {% else %}Null{% endif %}</p>
+    <div class="dashboard-container">
+        <div class="posted-jobs">
+            <h3>Your Posted Jobs</h3>
+            {% if jobs %}
+                <ol>
+                    {% for job in jobs %}
+                        <li>
+                            <strong>{{ job.job_title }}</strong>
+                            <p>Job Description: {{ job.description }}</p>
+                            <p>Skills Required: {% for skill in job.skills %}{{ skill }}{% endfor %}</p>
+                            <p>Number of applicants:{{ job.applications.all.count }}</p>
+
+                            <h4>Applications:</h4>
+                            {% if job.applications.all %}
+                                <ul>
+                                    {% for application in job.applications.all %}
+                                        <li>
+                                            {{ application.applicant.first_name }} applied on {{ application.applied_date }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>No applications yet.</p>
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% else %}
+                <p>You haven't posted any jobs yet.</p>
+            {% endif %}
+        </div>
+
+        <div class="candidates-list">
+            <h3>Candidates</h3>
+            <ul>
+                {% for jobseeker in jobseekers %}
+                    <li>
+                        <strong>{{ jobseeker.user.first_name }} {{ jobseeker.user.last_name }}</strong><br>
+                        <p>Education: {{ jobseeker.education }}</p>
+                        <p>Skills: {{ jobseeker.skills }}</p>
+                        <p>Experience: {{ jobseeker.experience }} years</p>
+                        {% if jobseeker.cv %}
+                            <a href="{{ jobseeker.cv.url }}" target="_blank">View CV</a>
+                        
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

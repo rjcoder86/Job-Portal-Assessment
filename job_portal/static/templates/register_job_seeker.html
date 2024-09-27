@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register as Job Seeker</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h2>Register as Job Seeker</h2>
+    <a href="{% url 'recruiter_register' %}">Register as Recruiter</a> <!-- Link to switch to job seeker registration -->
+    {% if messages %}   
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div>
+            <label for="id_first_name">First Name:</label>
+            {{ form.first_name }}
+            {% if form.first_name.errors %}
+                <div class="error">{{ form.first_name.errors }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_last_name">Last Name:</label>
+            {{ form.last_name }}
+            {% if form.last_name.errors %}
+                <div class="error">{{ form.last_name.errors }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_username">Username:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="error">{{ form.username.errors }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_email">Email:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="error">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_password">Password:</label>
+            {{ form.password }}
+            {% if form.password.errors %}
+                <div class="error">{{ form.password.errors }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_education">Education</label>
+            {{ form.education }}
+            {% if form.education.errors %}
+                <div class="error">{{ form.education.errors }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_skills">Skills:</label>
+            {{ form.skills }}
+            {% if form.skills.errors %}
+                <div class="error">{{ form.skills.errors }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_experience">Experience:</label>
+            {{ form.experience }}
+            {% if form.experience.errors %}
+                <div class="error">{{ form.experience.errors }}</div>
+            {% endif %}
+        </div>
+        <div>
+            <label for="id_cv">CV:</label>
+            {{ form.cv }}
+            {% if form.cv.errors %}
+                <div class="error">{{ form.cv.errors }}</div>
+            {% endif %}
+        </div>
+
+
+        <button type="submit">Register</button>
+    </form>
+
+    <a href="{% url 'login' %}">Already have an account? Login here</a>
+</body>
+</html>

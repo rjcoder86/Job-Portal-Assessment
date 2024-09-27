@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Seeker Dashboard</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}"> <!-- Include Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="{% static 'css/styles.css' %}"> Your custom CSS file -->
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Welcome, {{ user.username }} (Job Seeker)</h2>
+
+        <div class="profile-actions">
+            <a href="{% url 'edit_jobseeker_profile' %}" class="btn btn-primary">Edit Profile</a>
+            <a href="{% url 'logout' %}" class="btn btn-primary logout-btn">Logout</a>
+        </div>
+
+        {% if messages %}
+            <div class="alert alert-warning" role="alert">
+                <ul class="list-unstyled">
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <h3>Available Jobs</h3>
+        {% if jobs %}
+            <ul class="list-group">
+                {% for job in jobs %}
+                    <li class="list-group-item">
+                        <strong>{{ job.job_title }}</strong>
+                        <p>{{ job.description }}</p>
+                        <p><strong>Experience Required:</strong> {{ job.experience }} years</p>
+                        <form method="GET" action="{% url 'apply_job' job.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Apply Now</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No jobs available at the moment.</p>
+        {% endif %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

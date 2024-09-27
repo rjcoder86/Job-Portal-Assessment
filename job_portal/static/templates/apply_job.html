@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for {{ job.job_title }}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h2>Apply for {{ job.job_title }}</h2>
+    {% if messages %}
+        <ul class="error">
+            {% for message in messages%}
+            <li class="{% if message.tags %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </li>
+            {% endfor %}
+
+        </ul>
+
+    {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_cover_letter">Cover Letter (optional):</label>
+            {{ form.cover_letter }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Application</button>
+    </form>
+
+    <a href="{% url 'jobseeker_dashboard' %}">Back to Job Listings</a>
+</body>
+</html>
