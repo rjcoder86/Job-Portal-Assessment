@@ -1,0 +1,31 @@
+# version: '3'
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: jobPortal
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: neosoft
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DATABASE_NAME: jobPortal
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: neosoft
+      DATABASE_HOST: db
+
+volumes:
+  postgres_data:

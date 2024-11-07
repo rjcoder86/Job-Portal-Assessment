@@ -83,7 +83,8 @@ DATABASES = {
         'NAME': 'jobPortal', 
         'USER': 'postgres',
         'PASSWORD': 'neosoft', 
-        'HOST': 'localhost', 
+        # 'HOST': 'localhost',
+        'HOST': 'db', #for docker setup
         'PORT': '5432',
     }
 }
@@ -95,7 +96,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'rohitjadhav25x@gmail.com'
-EMAIL_HOST_PASSWORD = 'khbixgxqzoszhzlh'  
+EMAIL_HOST_PASSWORD = 'khbixgxqzoszhzlh'   
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
